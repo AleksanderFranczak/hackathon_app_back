@@ -21,3 +21,19 @@ class Users(db.Model):
     address_id=db.Column(db.Integer, db.ForeignKey('address.id'),nullable=False)
     items=db.relationship('Items', backref='users',lazy=True)
     
+class Suppliers(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    nr_phone = db.Column(db.Integer(15), unique=True)
+    email = db.Column(db.String(50))
+    address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable = False)
+    item=db.relationship('Items', backref='suppliers',lazy=True)
+
+
+class Items(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    name = db.Column(db.String(50))
+    description = db.Column(db.String(150))
+    customer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
