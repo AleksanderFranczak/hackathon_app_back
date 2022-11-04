@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Address(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     city=db.Column(db.String(50))
@@ -12,6 +14,7 @@ class Address(db.Model):
 class Categories(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     name=db.Column(db.String(30))
+    items = db.relationship('Items', backref = 'categories', lazy = True)
 
 class Users(db.Model):
     id=db.Column(db.Integer, primary_key=True)
@@ -37,3 +40,8 @@ class Items(db.Model):
     description = db.Column(db.String(150))
     customer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
+    status = db.Column(db.Boolean)
+    picture = db.Column(db.Blob)
+    creation_date = db.Column(db.DateTime, default=datetime.now())
+    modification_date = db.Column(db.DateTime, default=datetime.now())
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
