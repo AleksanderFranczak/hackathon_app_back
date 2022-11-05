@@ -120,14 +120,13 @@ def login():
         session['user']=json.dumps(ses_user)
         print(session)
         return Response(status=200)
-    try:
-        if False:
-            data_dict["status"] = "granted"
-        else:
-            data_dict["status"] = "denied"
-    except Exception:
-        return Response(status=400)
-    return Response(response=json.dumps([data_dict]), status=200, mimetype='application/json')
+    else:
+        return Response(status=302)
+
+@app.route("/logout",methods=["GET"])
+def logout():
+    session.pop('user',None)
+    return Response(status=200)
 
 
 def add_product_to_db(json_data):
