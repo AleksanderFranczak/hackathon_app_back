@@ -1,0 +1,14 @@
+import random
+
+cities=[1,2,3,4,5]
+id=[1,2,3,4,5]
+names=['Szymon','Marcin','Agata','Adam','Ola']
+passwords=['zaq1@WSX','mju7*IK<']
+emails=['Szymon@gmail.com','Marcin@gmail.com','Agata@gmail.com','Adam@gmail.com','Ola@gmail.com']
+phones=['123456789','234567890','345678901','456789012','567890123']
+jpgs=['zdj1.jpg','zdj2.jpg','zdj3.jpg','zdj4.jpg','zdj5.jpg']
+description=['Lubię pączki i koniki','Dużo jeżdżę na rowerze','nie wiem dużo zato mało też nie','lubie grać w gry','chcę herbaty']
+
+def insert_user():
+    for x in range(5):
+        yield f'INSERT INTO Users (id, name, email, password, nr_phone, description, address_id) VALUES ({str(id[x])},{names[x]},{emails[x]},{passwords[random.randrange(1,2)]},{phones[x]},{jpgs[x]},{description[x]},{str(cities[x])};'
