@@ -1,4 +1,5 @@
 from datetime import datetime
+from db import db
 
 class Address(db.Model):
     id=db.Column(db.Integer, primary_key=True)

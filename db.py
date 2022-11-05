@@ -1,7 +1,14 @@
+from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
-db = sqlite3.connect("test.db")
-db_cr = db.cursor()
+db = SQLAlchemy()
+
+def init_app(app):
+    db.init_app(app)
+    db.create_all()
+
+db_cn = sqlite3.connect("test.db")
+db_cr = db_cn.cursor()
 
 DB_SETUP = False
 
