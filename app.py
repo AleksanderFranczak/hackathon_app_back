@@ -86,8 +86,7 @@ def add_user_to_db(**kwargs):
         return 0
     return 1
 
-<<<<<<< HEAD
-=======
+
 def login_user(**kwargs):
     try:
         user=Users.query.limit(1).all()
@@ -104,7 +103,6 @@ def login_user(**kwargs):
 def index():
     return render_template("index.html")
 
->>>>>>> 5ac207bff6a414b0c7b9af2c210058a31dc6bfa4
 
 @app.route("/register", methods=["POST"])
 def register():
