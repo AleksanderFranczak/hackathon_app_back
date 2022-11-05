@@ -1,25 +1,19 @@
-from flask_sqlalchemy import SQLAlchemy
-import sqlite3
+# import sqlite3
 
-db = SQLAlchemy()
+# db_cn = sqlite3.connect("./instance/project.db")
+# db_cr = db_cn.cursor()
+from app import db
+from app import Users
 
-def init_app(app):
-    db.init_app(app)
-    db.create_all()
-
-db_cn = sqlite3.connect("test.db")
-db_cr = db_cn.cursor()
-
-DB_SETUP = False
-
-#! If base DB_SETUP = False -> execute create tables
-def init_databse():
-    pass
+def add_user_to_db(**kwargs):
+    try:
+        user = Users(**kwargs)
+        db.session.add(user)
+        db.session.commit()
+    except Exception as err:
+        raise err
+    return 0
 
 
-def add_user_to_db(email, password):
-    pass
-
-
-def user_in_db(email, password):
+def user_in_db(name, email, password, nr_phone, description, address_id):
     pass

@@ -1,13 +1,7 @@
 from flask import Flask, render_template, request, Response
-from db import init_databse, user_in_db, add_user_to_db
 import json
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-
-# app = Flask(__name__)
-# app.config.from_object('config.DevelopmentConfig')
-# db = SQLAlchemy()
 
 # create the extension
 db = SQLAlchemy()
@@ -15,6 +9,8 @@ db = SQLAlchemy()
 app = Flask(__name__)
 # configure the SQLite database, relative to the app instance folder
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+app.config["DEVELOPMENT"] = True
+app.config["DEBUG"] = True
 # initialize the app with the extension
 db.init_app(app)
 
@@ -40,11 +36,11 @@ class Users(db.Model):
     name=db.Column(db.String(30))
     email=db.Column(db.String(50))
     password=db.Column(db.String(50))
-    picture = db.Column(db.BLOB)
+    # picture = db.Column(db.BLOB, nullable=True)
     description = db.Column(db.String(20))
     nr_phone = db.Column(db.Integer, unique=True)
     address_id=db.Column(db.Integer, db.ForeignKey('address.id'),nullable=False)
-    items=db.relationship('Items', backref='users',lazy=True)
+    # items=db.relationship('Items', backref='users',lazy=True)
     
 class Suppliers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,13 +68,14 @@ class Items(db.Model):
 with app.app_context():
     db.create_all()
 
-# try:
-#     res = init_databse()
-#     if res:
-#         raise Exception("Database is not created properly")
-# except Exception:
-#     raise Exception("Database is not created properly")
-
+def add_user_to_db(**kwargs):
+    try:
+        user = Users(**kwargs)
+        db.session.add(user)
+        db.session.commit()
+    except Exception:
+        return 0
+    return 1
 
 #! Index route for testing purposes 
 @app.route("/", methods=["GET"])
@@ -90,18 +87,15 @@ def index():
 def register():
     
     # Getting data from front-end form
-    data = request.form.get("email"), request.form.get("password")
+    data = request.form
 
     #Adding user to databse
-    try:
-        add_user_to_db(*data)
-    except Exception:
+    db_res = add_user_to_db(**data)
+    if db_res == 1:
+        data_dict = {"status": "registered"}
+        return Response(response=json.dumps(data_dict), status=200, mimetype='application/json')
+    elif db_res == 0:
         return Response(status=400)
-    
-    data_dict = {"email": data[0], "password": data[1], "status": "registered"}
-    return Response(response=json.dumps(data_dict), status=200, mimetype='application/json')
-
-
 
 
 #! route for login -> return json [status] = logged
@@ -111,7 +105,7 @@ def login():
     data_dict = {"email": data[0], "password": data[1]}
     
     try:
-        if user_in_db(*data):
+        if False:
             data_dict["status"] = "granted"
         else:
             data_dict["status"] = "denied"
