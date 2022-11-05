@@ -22,6 +22,9 @@ class Users(db.Model):
     name=db.Column(db.String(30))
     email=db.Column(db.String(50))
     password=db.Column(db.String(50))
+    picture = db.Column(db.Blob)
+    description = db.Column(db.String(20))
+    nr_phone = db.Column(db.Integer(15), unique=True)
     address_id=db.Column(db.Integer, db.ForeignKey('address.id'),nullable=False)
     items=db.relationship('Items', backref='users',lazy=True)
     
