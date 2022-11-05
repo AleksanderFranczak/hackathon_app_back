@@ -3,6 +3,7 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from passlib.hash import sha256_crypt
+from flask import jsonify
 
 
 
@@ -120,6 +121,7 @@ def login():
         session['user']=json.dumps(ses_user)
         print(session)
         return Response(status=200)
+<<<<<<< HEAD
     else:
         return Response(status=302)
 
@@ -127,6 +129,8 @@ def login():
 def logout():
     session.pop('user',None)
     return Response(status=200)
+=======
+>>>>>>> 42af3f8445d975754d8f051fb774196d036674a9
 
 
 def add_product_to_db(json_data):
@@ -134,6 +138,10 @@ def add_product_to_db(json_data):
     try:
         if "supplier_id" not in json_data:
             json_data["supplier_id"] = "0"
+        if "category_id" not in json_data:
+            json_data["category_id"] = "0"
+        if "customer_id" not in json_data:
+            json_data["customer_id"] = "0"
         new_product = Items(**json_data)
         db.session.add(new_product)
         db.session.commit()
@@ -153,6 +161,33 @@ def add_item():
     elif not db_res == 0:
         return Response(status=400)
 
+
+@app.route("/get-item", methods=["POST"])
+def get_item():
+    default_key = "creation_date"
+    deafult_order = "dsc"
+    if "key" not in request.args:
+        key = default_key
+    else:
+        key = request.args.get("key")
+    if "order" not in request.args:
+        order = default_key
+    else:
+        order = request.args.get("order")
+    if "filter" in request.args:
+        filter = request.args.get('filter')
+
+    try:
+        items = Items.query.order_by(Items.__dict__[key]).all()
+        items = [item.__dict__ for item in items]
+        for item in items:
+            del item["_sa_instance_state"]
+            item["creation_date"] = str(item["creation_date"])
+            item["modification_date"] = str(item["modification_date"])
+    except Exception as err:
+        raise err
+    return Response(status=200, response=json.dumps(items), mimetype='application/json')
+    
 
 if __name__ == "__main__":
     app.run()
