@@ -34,9 +34,10 @@ class Categories(db.Model):
 class Users(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     name=db.Column(db.String(30))
+    surrname = db.Column(db.String(50))
     email=db.Column(db.String(50))
     password=db.Column(db.String(50))
-    # picture = db.Column(db.BLOB, nullable=True)
+    # picture = db.Column(db.Blob)
     description = db.Column(db.String(20))
     nr_phone = db.Column(db.Integer, unique=True)
     address_id=db.Column(db.Integer, db.ForeignKey('address.id'),nullable=False)
@@ -45,6 +46,7 @@ class Users(db.Model):
 class Suppliers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
+    surrname = db.Column(db.String(50))
     nr_phone = db.Column(db.Integer, unique=True)
     email = db.Column(db.String(50))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable = False)
