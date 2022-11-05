@@ -121,7 +121,6 @@ def login():
         session['user']=json.dumps(ses_user)
         print(session)
         return Response(status=200)
-<<<<<<< HEAD
     else:
         return Response(status=302)
 
@@ -129,8 +128,6 @@ def login():
 def logout():
     session.pop('user',None)
     return Response(status=200)
-=======
->>>>>>> 42af3f8445d975754d8f051fb774196d036674a9
 
 
 def add_product_to_db(json_data):
