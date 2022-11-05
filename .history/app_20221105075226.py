@@ -47,7 +47,7 @@ class Users(db.Model):
     nr_phone = db.Column(db.Integer, unique=True)
     address_id=db.Column(db.Integer, db.ForeignKey('address.id'),nullable=False)
     # items=db.relationship('Items', backref='users',lazy=True)
-
+    
 class Suppliers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
@@ -88,7 +88,7 @@ def add_user_to_db(**kwargs):
 
 
 
-#! Index route for testing purposes
+#! Index route for testing purposes 
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
