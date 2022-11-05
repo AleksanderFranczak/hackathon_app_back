@@ -121,7 +121,6 @@ def login():
         session['user']=json.dumps(ses_user)
         print(session)
         return Response(status=200)
-<<<<<<< HEAD
     else:
         return Response(status=302)
 
@@ -129,19 +128,17 @@ def login():
 def logout():
     session.pop('user',None)
     return Response(status=200)
-=======
->>>>>>> 42af3f8445d975754d8f051fb774196d036674a9
 
 
 def add_product_to_db(json_data):
     print(json_data)
     try:
         if "supplier_id" not in json_data:
-            json_data["supplier_id"] = "0"
+            json_data["supplier_id"] = None
         if "category_id" not in json_data:
-            json_data["category_id"] = "0"
+            json_data["category_id"] = None
         if "customer_id" not in json_data:
-            json_data["customer_id"] = "0"
+            json_data["customer_id"] = None
         new_product = Items(**json_data)
         db.session.add(new_product)
         db.session.commit()
