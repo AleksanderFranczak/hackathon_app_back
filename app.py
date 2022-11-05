@@ -60,12 +60,12 @@ class Items(db.Model):
     name = db.Column(db.String(50))
     description = db.Column(db.String(150))
     customer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
+    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=True)
     status = db.Column(db.Boolean)
     picture = db.Column(db.BLOB)
     creation_date = db.Column(db.DateTime, default=datetime.now())
     modification_date = db.Column(db.DateTime, default=datetime.now())
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
 
 
 with app.app_context():
@@ -82,18 +82,11 @@ def add_user_to_db(**kwargs):
         return 0
     return 1
 
-#! Index route for testing purposes 
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
-
 
 @app.route("/register", methods=["POST"])
 def register():
-    
     # Getting data from front-end form
     data = request.form
-
     #Adding user to databse
     db_res = add_user_to_db(**data)
     if db_res == 1:
@@ -119,6 +112,30 @@ def login():
     
     return Response(response=json.dumps([data_dict]), status=200, mimetype='application/json')
 
+
+def add_product_to_db(json_data):
+    print(json_data)
+    try:
+        if "supplier_id" not in json_data:
+            json_data["supplier_id"] = "0"
+        new_product = Items(**json_data)
+        db.session.add(new_product)
+        db.session.commit()
+    except Exception as err:
+        raise err
+    return 1
+
+
+@app.route("/add-item", methods=["POST"])
+def add_item():
+    data = request.get_json()
+    # if "location" not in data:
+    #     data["location"] = "Brak"
+    db_res = add_product_to_db(data)
+    if db_res == 1:
+        return Response(status=200)
+    elif not db_res == 0:
+        return Response(status=400)
 
 
 if __name__ == "__main__":
