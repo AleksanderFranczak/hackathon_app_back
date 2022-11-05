@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, Response
 import json
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from passlib.hash import sha256_crypt
 
 # create the extension
 db = SQLAlchemy()
@@ -71,6 +72,8 @@ with app.app_context():
     db.create_all()
 
 def add_user_to_db(**kwargs):
+    hash = sha256_crypt.encrypt(kwargs.get("password"))
+    kwargs["password"] = hash
     try:
         user = Users(**kwargs)
         db.session.add(user)
