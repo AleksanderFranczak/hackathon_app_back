@@ -91,10 +91,7 @@ def add_user_to_db(**kwargs):
 
 
 
-#! Index route for testing purposes
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
+
 
 
 @app.route("/register", methods=["POST"])
