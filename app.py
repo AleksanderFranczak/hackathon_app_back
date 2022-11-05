@@ -86,25 +86,13 @@ def add_user_to_db(**kwargs):
         return 0
     return 1
 
-<<<<<<< HEAD
-=======
-def login_user(**kwargs):
-    try:
-        user=Users.query.limit(1).all()
-        print(user is None)
-    except Exception:
-        return Response(status=400)
-    if kwargs["password"] == user.password:
-        return user
-    else:
-        return Response(status=400)
+
 
 #! Index route for testing purposes 
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
 
->>>>>>> 5ac207bff6a414b0c7b9af2c210058a31dc6bfa4
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -124,18 +112,21 @@ def register():
 def login():
     email = request.form["email"]
     password= request.form["password"]
-    data_dict = {"email": email, "password": password}
-    
-    db_res = login_user(**data_dict)
-    session['user']=db_res
-    """try:
+    user=Users.query.filter_by(email=email).first()
+    if user.password==password:
+        ses_user=dict(user.__dict__)
+        ses_user.pop('_sa_instance_state')
+        print(ses_user)
+        session['user']=json.dumps(ses_user)
+        print(session)
+        return Response(status=200)
+    try:
         if False:
             data_dict["status"] = "granted"
         else:
             data_dict["status"] = "denied"
     except Exception:
-        return Response(status=400)"""
-    
+        return Response(status=400)
     return Response(response=json.dumps([data_dict]), status=200, mimetype='application/json')
 
 
