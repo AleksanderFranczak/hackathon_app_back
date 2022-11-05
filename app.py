@@ -182,7 +182,7 @@ def get_item():
             item["creation_date"] = str(item["creation_date"])
             item["modification_date"] = str(item["modification_date"])
     except Exception as err:
-        raise err
+        return Response(status=400)
     return Response(status=200, response=json.dumps(items), mimetype='application/json')
     
 
