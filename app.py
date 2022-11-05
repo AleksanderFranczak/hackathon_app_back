@@ -134,11 +134,11 @@ def add_product_to_db(json_data):
     print(json_data)
     try:
         if "supplier_id" not in json_data:
-            json_data["supplier_id"] = "0"
+            json_data["supplier_id"] = None
         if "category_id" not in json_data:
-            json_data["category_id"] = "0"
+            json_data["category_id"] = None
         if "customer_id" not in json_data:
-            json_data["customer_id"] = "0"
+            json_data["customer_id"] = None
         new_product = Items(**json_data)
         db.session.add(new_product)
         db.session.commit()
