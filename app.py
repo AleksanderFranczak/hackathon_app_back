@@ -74,7 +74,9 @@ class Items(db.Model):
 
 
 with app.app_context():
+    db.drop_all()
     db.create_all()
+    
 
 def add_user_to_db(**kwargs):
     hash = sha256_crypt.encrypt(kwargs.get("password"))
@@ -89,10 +91,7 @@ def add_user_to_db(**kwargs):
 
 
 
-#! Index route for testing purposes
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
+
 
 
 @app.route("/register", methods=["POST"])
