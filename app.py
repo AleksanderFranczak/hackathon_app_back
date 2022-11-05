@@ -112,9 +112,9 @@ def register():
 @app.route("/login", methods=["POST"])
 def login():
     email = request.form["email"]
-    password= request.form["password"]
+    password = request.form["password"]
     user=Users.query.filter_by(email=email).first()
-    if user.password==password:
+    if sha256_crypt.verify(password, user.password):
         ses_user=dict(user.__dict__)
         ses_user.pop('_sa_instance_state')
         print(ses_user)
