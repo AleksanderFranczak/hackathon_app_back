@@ -31,7 +31,7 @@ class Users(db.Model):
 class Suppliers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    nr_phone = db.Column(db.Integer(15), unique=True)
+    nr_phone = db.Column(db.Integer, unique=True)
     email = db.Column(db.String(50))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable = False)
     item=db.relationship('Items', backref='suppliers',lazy=True)
@@ -45,7 +45,7 @@ class Items(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
     status = db.Column(db.Boolean)
-    picture = db.Column(db.Blob)
+    picture = db.Column(db.BLOB)
     creation_date = db.Column(db.DateTime, default=datetime.now())
     modification_date = db.Column(db.DateTime, default=datetime.now())
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
