@@ -1,13 +1,17 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, session
 import json
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from passlib.hash import sha256_crypt
 
+
+
 # create the extension
 db = SQLAlchemy()
 # create the app
 app = Flask(__name__)
+app.secret_key='supersecret9u32ujfwdnfn2iokey'
+
 # configure the SQLite database, relative to the app instance folder
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 app.config["DEVELOPMENT"] = True
@@ -82,6 +86,25 @@ def add_user_to_db(**kwargs):
         return 0
     return 1
 
+<<<<<<< HEAD
+=======
+def login_user(**kwargs):
+    try:
+        user=Users.query.limit(1).all()
+        print(user is None)
+    except Exception:
+        return Response(status=400)
+    if kwargs["password"] == user.password:
+        return user
+    else:
+        return Response(status=400)
+
+#! Index route for testing purposes 
+@app.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
+
+>>>>>>> 5ac207bff6a414b0c7b9af2c210058a31dc6bfa4
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -99,16 +122,19 @@ def register():
 #! route for login -> return json [status] = logged
 @app.route("/login", methods=["POST"])
 def login():
-    data = request.form.get("email"), request.form.get("password")
-    data_dict = {"email": data[0], "password": data[1]}
+    email = request.form["email"]
+    password= request.form["password"]
+    data_dict = {"email": email, "password": password}
     
-    try:
+    db_res = login_user(**data_dict)
+    session['user']=db_res
+    """try:
         if False:
             data_dict["status"] = "granted"
         else:
             data_dict["status"] = "denied"
     except Exception:
-        return Response(status=400)
+        return Response(status=400)"""
     
     return Response(response=json.dumps([data_dict]), status=200, mimetype='application/json')
 
