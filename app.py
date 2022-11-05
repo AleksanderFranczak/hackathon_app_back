@@ -60,7 +60,7 @@ class Items(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'), nullable=False)
     status = db.Column(db.Boolean)
-    # picture = db.Column(db.Blob)
+    picture = db.Column(db.BLOB)
     creation_date = db.Column(db.DateTime, default=datetime.now())
     modification_date = db.Column(db.DateTime, default=datetime.now())
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
